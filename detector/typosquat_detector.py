@@ -2,7 +2,6 @@ from urllib.parse import urlparse
 import Levenshtein
 
 
-# list of well-known domains attackers often mimic via typosquatting
 TARGET_DOMAINS = [
     "google.com",
     "facebook.com",
@@ -10,21 +9,39 @@ TARGET_DOMAINS = [
     "amazon.com",
     "microsoft.com",
     "apple.com",
-    "instagram.com",
-    "twitter.com",
-    "linkedin.com",
-    "netflix.com",
+]
+
+BRANDS = [
+    "google",
+    "paypal",
+    "facebook",
+    "amazon",
+    "microsoft",
+    "apple",
 ]
 
 
-def extract_domain(url: str) -> str:
-    """Return a normalized domain name for the given URL.
+HOMOGLYPHS = {
+    "0": "o",
+    "1": "l",
+    "3": "e",
+    "5": "s",
+    "@": "a"
+}
 
-    The function uses :mod:`urllib.parse` to parse the URL and then
-    lower-cases the network location.  A leading ``www.`` prefix is removed
-    so that ``www.google.com`` and ``google.com`` are treated equivalently.
-    """
+
+def normalize(text: str):
+
+    for fake, real in HOMOGLYPHS.items():
+        text = text.replace(fake, real)
+
+    return text
+
+
+def extract_domain(url: str):
+
     parsed = urlparse(url)
+
     domain = parsed.netloc.lower()
 
     if domain.startswith("www."):
@@ -33,54 +50,67 @@ def extract_domain(url: str) -> str:
     return domain
 
 
-def find_closest_domain(domain: str, targets: list[str]) -> tuple[str | None, int]:
-    """Find the target domain with the smallest Levenshtein distance.
+def get_sld(domain: str):
 
-    Parameters
-    ----------
-    domain : str
-        The domain name to compare.
-    targets : list[str]
-        A list of candidate domains to measure against.
+    return domain.split(".")[0]
 
-    Returns
-    -------
-    (closest_domain, distance)
-        ``closest_domain`` is ``None`` if ``targets`` is empty, otherwise the
-        target with the lowest edit distance.  ``distance`` is the numeric
-        Levenshtein distance.
-    """
+
+def find_closest_domain(domain: str, targets):
+
     closest_domain = None
     smallest_distance = float("inf")
 
+    domain_sld = normalize(get_sld(domain))
+
     for target in targets:
-        distance = Levenshtein.distance(domain, target)
+
+        target_sld = normalize(get_sld(target))
+
+        distance = Levenshtein.distance(domain_sld, target_sld)
+
         if distance < smallest_distance:
+
             smallest_distance = distance
             closest_domain = target
 
     return closest_domain, smallest_distance
 
 
-def detect_typosquatting(url: str) -> dict:
-    """Analyze ``url`` for possible typosquatting.
+def contains_brand(domain):
 
-    The function returns a dictionary containing a ``suspicious`` flag and an
-    optional ``indicator`` message describing the reason.  A domain is marked
-    suspicious if it is within an edit distance of 2 from a known target but
-    not identical.
-    """
+    indicators = []
+
+    domain_sld = normalize(get_sld(domain))
+
+    for brand in BRANDS:
+
+        if brand in domain_sld:
+            indicators.append(
+                f"Brand name '{brand}' detected inside domain"
+            )
+
+    return indicators
+
+
+def detect_typosquatting(url: str):
+
     domain = extract_domain(url)
+
+    indicators = []
+
     closest, distance = find_closest_domain(domain, TARGET_DOMAINS)
 
-    result = {"suspicious": False, "indicator": None}
+    if closest and distance <= 3 and domain != closest:
 
-    # edit distance cutoff chosen heuristically; adjust as needed
-    if closest and distance <= 2 and domain != closest:
-        result["suspicious"] = True
-        result["indicator"] = (
-            f"Domain '{domain}' is very similar to '{closest}' (distance {distance}), "
-            "which may indicate typosquatting."
+        indicators.append(
+            f"Domain '{domain}' similar to '{closest}' (distance {distance})"
         )
 
-    return result
+    brand_hits = contains_brand(domain)
+
+    indicators.extend(brand_hits)
+
+    return {
+        "suspicious": len(indicators) > 0,
+        "indicators": indicators
+    }
