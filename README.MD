@@ -1,7 +1,7 @@
-![Python](https://img.shields.io/badge/python-3.10+-blue)
+
 # Phishing URL Analyzer
 
-![Cybersecurity](https://img.shields.io/badge/domain-cybersecurity-red)
+![Cybersecurity](https://img.shields.io/badge/domain-cybersecurity-red)![Python](https://img.shields.io/badge/python-3.10+-blue)
 
 A Python-based tool for detecting potential phishing websites by analyzing URLs, domains, HTML content, and typosquatting patterns.
 
@@ -59,12 +59,15 @@ phishing-detector
 ├ README.md
 └ requirements.txt
 
-## Instalation
+## InstalLation
 Clone the repository
-```git clone https://github.com/yourusername/phishing-analyzer
-
 ```
-```cd phishing-analyzer ```
+
+    git clone https://github.com/yourusername/phishing-analyzer
+    
+    cd phishing-analyzer
+```
+
 
 Install dependencies
 ````pip install -r requirements.txt```
@@ -78,11 +81,11 @@ Example:
 ## Risk Score
 The analyzer assigns a risk score from 0 to 10.
 ---
-Score |	Risk Level
-0–2	  | Low
-3–5	  | Medium
-6–8	  | High
-9–10  | Critical
+Score |	Risk Level|
+0–2	  = Low|
+3–5	  = Medium|
+6–8	  = High|
+9–10  = Critical|
 ---
 
 ## Educational Purpose
