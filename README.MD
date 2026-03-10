@@ -1,28 +1,33 @@
-# Phishing Detector
-A phishing detection tool based on heuristic URL analysis.
+# Phishing URL Analyzer
+
+A Python-based tool for detecting potential phishing websites by analyzing URLs, domains, HTML content, and typosquatting patterns.
+
+This project simulates techniques used in real phishing detection engines and security tools.
 
 ## Features
-- IP-based URL detection: Identifies if a URL uses a raw IP address instead of a domain name.
-- Multiple subdomains: Detects an unusual number of subdomains.
-- Suspicious keyword identification: Flags common phishing terms (e.g., "login", "verify", "secure").
-- URL length analysis: Analyzes whether the URL is excessively long to hide its true destination.
 
-## Usage Example
-```
-python main.py https://secure-login-paypal.com
-```
-## Output
-Risk Score: 4
+- URL analysis
+- Domain analysis
+- HTML content inspection
+- Typosquatting detection
+- Brand name detection inside domains
+- Risk scoring system (0–10)
 
-Indicators:
+## Detection Techniques
 
-[!] Suspicious keyword
+The analyzer searches for multiple phishing indicators such as:
 
-[!] Long URL
+- Suspicious keywords in URLs (login, verify, secure, update)
+- Typosquatting domains similar to well-known services
+- Brand names embedded inside domains
+- Missing or suspicious domain information
+- Suspicious HTML structures
 
-## Technologies Used
-- Python
+Each indicator contributes to a weighted **risk score**.
 
-- Regex (Regular Expressions)
+## Example
 
-- URL parsing
+Running the analyzer:
+
+```bash
+python -m cli.main http://g00glelogin.com
