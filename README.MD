@@ -45,7 +45,7 @@ Analysis complete, total indicators found: 3
 
 Risk level: 7/10
 ## Project Structure
-phishing-detector
+```phishing-detector
 │
 ├ detectors
 │  ├ url_analyzer.py
@@ -58,11 +58,10 @@ phishing-detector
 │
 ├ README.md
 └ requirements.txt
-
+```
 ## InstalLation
 Clone the repository
 ```
-
     git clone https://github.com/yourusername/phishing-analyzer
     
     cd phishing-analyzer
@@ -70,7 +69,9 @@ Clone the repository
 
 
 Install dependencies
-````pip install -r requirements.txt```
+```
+pip install -r requirements.txt
+```
 ## Usage
 Run the detector from the command line
 `python -m cli.main <url>`
