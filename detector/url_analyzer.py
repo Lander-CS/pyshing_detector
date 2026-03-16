@@ -91,13 +91,14 @@ def analyze_url_indicators(url: str) -> list[Indicator]:
     return indicators
 
 
-def analyze_url(url: str) -> list[str]:
-    """
+"""def analyze_url(url: str) -> list[str]:
+   
     Backwards-compatible wrapper returning only indicator messages.
 
     Prefer usar analyze_url_indicators para obter objetos estruturados.
-    """
+ 
     return [indicator.message for indicator in analyze_url_indicators(url)]
+    """
 
 
 def classify(indicators: list) -> str:
@@ -122,7 +123,7 @@ def classify(indicators: list) -> str:
 # example usage: prompt user for a URL and display analysis
 if __name__ == "__main__":
     url = input("Enter a URL to analyze: ")
-    indicators = analyze_url(url)
+    indicators = analyze_url_indicators(url)
     classification = classify(indicators)
     print(f"URL: {url}")
     print(f"Classification: {classification}")

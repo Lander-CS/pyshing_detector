@@ -6,8 +6,8 @@ from typing import Iterable, List
 from pydantic import HttpUrl
 
 from .domain_analyzer import analyze_domain_indicators
-from .html_analyzer import analyze_html
-from .url_analyzer import analyze_url
+from .html_analyzer import analyze_html_indicators
+from .url_analyzer import analyze_url_indicators
 from .typosquat_detector import detect_typosquatting_indicators
 
 from .models import (
@@ -58,13 +58,13 @@ def analyze(url: str | HttpUrl) -> AnalysisResult:
     indicators: List[Indicator] = []
 
     # URL analysis
-    indicators.extend(analyze_url(url_str))
+    indicators.extend(analyze_url_indicators(url_str))
 
     # Domain analysis
     indicators.extend(analyze_domain_indicators(url_str))
 
     # HTML analysis
-    indicators.extend(analyze_html(url_str))
+    indicators.extend(analyze_html_indicators(url_str))
 
     # Typosquatting analysis
     indicators.extend(detect_typosquatting_indicators(url_str))
