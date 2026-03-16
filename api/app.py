@@ -9,6 +9,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+import uvicorn
 
 from detector.models import AnalysisResult
 from detector.service import analyze
@@ -105,3 +106,6 @@ def get_history_item(analysis_id: int) -> AnalysisResult:
         )
     return result
 
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
