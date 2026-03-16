@@ -15,6 +15,10 @@ from detector.service import analyze
 
 from .storage import get_analysis, init_db, list_analyses, save_analysis
 from .validators import validate_url
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 
 BASE_DIR = Path(__file__).resolve().parent
